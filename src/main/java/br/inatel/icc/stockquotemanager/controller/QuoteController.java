@@ -1,17 +1,24 @@
 package br.inatel.icc.stockquotemanager.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.inatel.icc.stockquotemanager.dto.StockDto;
 import br.inatel.icc.stockquotemanager.dto.StockQuoteDto;
+import br.inatel.icc.stockquotemanager.form.QuoteForm;
 import br.inatel.icc.stockquotemanager.model.Quote;
 import br.inatel.icc.stockquotemanager.repository.QuoteRepository;
 import br.inatel.icc.stockquotemanager.service.StockService;
@@ -25,6 +32,21 @@ public class QuoteController {
 	@Autowired
 	public QuoteController(QuoteRepository quoteRepository) {
 		this.quoteRepository = quoteRepository;
+	}
+	
+	@PostMapping
+	@Transactional
+	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
+		Quote quote = quoteForm.toQuote();
+		
+		quoteRepository.save(quote);
+		
+		List<Quote> quotes = quoteRepository.findByStockId(quote.getStockId());
+		StockQuoteDto stockQuote = new StockQuoteDto(quote.getStockId(), quotes);
+		
+		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(quote.getId()).toUri();
+		
+		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}
 	
 	@GetMapping("/{id}")
