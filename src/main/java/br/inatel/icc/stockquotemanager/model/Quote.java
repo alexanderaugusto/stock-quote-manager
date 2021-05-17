@@ -1,4 +1,4 @@
-package br.inatel.icc.stockmanager.model;
+package br.inatel.icc.stockquotemanager.model;
 
 import java.time.LocalDateTime;
 

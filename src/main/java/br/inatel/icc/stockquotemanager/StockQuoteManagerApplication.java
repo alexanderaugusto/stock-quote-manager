@@ -1,4 +1,4 @@
-package br.inatel.icc.stockmanager;
+package br.inatel.icc.stockquotemanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
