@@ -11,7 +11,7 @@ import br.inatel.icc.stockquotemanager.model.Quote;
 public class StockQuoteDto {
 
 	private String id;
-	private Map<String, String> quotes = new HashMap<String, String>();
+	private Map<String, String> quotes = new HashMap<>();
 	
 	public StockQuoteDto(String stockId, List<Quote> quotes) {
 		this.id = stockId;
