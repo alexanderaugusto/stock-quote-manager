@@ -37,6 +37,13 @@ public class QuoteController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
+		StockService stockService = new StockService();
+		StockDto stock = stockService.getById(quoteForm.getStockId());
+		
+		if(stock == null) {
+			return ResponseEntity.status(404).build();
+		}
+		
 		Quote quote = quoteForm.toQuote();
 		
 		quoteRepository.save(quote);
