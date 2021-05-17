@@ -28,16 +28,17 @@ import br.inatel.icc.stockquotemanager.service.StockService;
 public class QuoteController {
 
 	private QuoteRepository quoteRepository;
+	private StockService stockService;
 	
 	@Autowired
-	public QuoteController(QuoteRepository quoteRepository) {
+	public QuoteController(QuoteRepository quoteRepository, StockService stockService) {
 		this.quoteRepository = quoteRepository;
+		this.stockService = stockService;
 	}
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
-		StockService stockService = new StockService();
 		StockDto stock = stockService.getById(quoteForm.getStockId());
 		
 		if(stock == null) {
@@ -58,7 +59,6 @@ public class QuoteController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<StockQuoteDto> listById(@PathVariable("id") String stockId){
-		StockService stockService = new StockService();
 		StockDto stock = stockService.getById(stockId);
 		
 		if(stock == null) {
@@ -72,7 +72,6 @@ public class QuoteController {
 	
 	@GetMapping
 	public ResponseEntity<List<StockQuoteDto>> list(){
-		StockService stockService = new StockService();
 		List<StockDto> stocks = stockService.getAll();
 		
 		List<StockQuoteDto> stockQuotes = stocks.stream().map(stock -> {
