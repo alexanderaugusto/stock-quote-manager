@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Quote {
@@ -14,16 +13,16 @@ public class Quote {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-	private Stock stock;
-	
+	private String stockId;
 	private LocalDateTime date;
 	private Double value;
+	
 	
 	public Quote() {
 	}
 	
-	public Quote(LocalDateTime date, Double value) {
+	public Quote(LocalDateTime date, Double value, String stockId) {
+		this.stockId = stockId;
 		this.date = date;
 		this.value = value;
 	}
@@ -31,9 +30,9 @@ public class Quote {
 	public Long getId() {
 		return id;
 	}
-	
-	public Stock getStock() {
-		return stock;
+
+	public String getStockId() {
+		return stockId;
 	}
 
 	public LocalDateTime getDate() {
