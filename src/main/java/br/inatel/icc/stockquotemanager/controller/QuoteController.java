@@ -1,6 +1,7 @@
 package br.inatel.icc.stockquotemanager.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,19 @@ public class QuoteController {
 		List<Quote> quotes = quoteRepository.findByStockId(stockId);
 		StockQuoteDto stockQuote = new StockQuoteDto(stockId, quotes);
 		return ResponseEntity.status(200).body(stockQuote);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<StockQuoteDto>> list(){
+		StockService stockService = new StockService();
+		List<StockDto> stocks = stockService.getAll();
+		
+		List<StockQuoteDto> stockQuotes = stocks.stream().map(stock -> {
+			List<Quote> quotes = quoteRepository.findByStockId(stock.getId());
+			StockQuoteDto stockQuote = new StockQuoteDto(stock.getId(), quotes);
+			return stockQuote;
+		}).collect(Collectors.toList());
+		
+		return ResponseEntity.status(200).body(stockQuotes);
 	}
 }
