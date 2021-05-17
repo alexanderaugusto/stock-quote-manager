@@ -20,19 +20,19 @@ import br.inatel.icc.stockquotemanager.dto.StockDto;
 import br.inatel.icc.stockquotemanager.dto.StockQuoteDto;
 import br.inatel.icc.stockquotemanager.form.QuoteForm;
 import br.inatel.icc.stockquotemanager.model.Quote;
-import br.inatel.icc.stockquotemanager.repository.QuoteRepository;
+import br.inatel.icc.stockquotemanager.service.QuoteService;
 import br.inatel.icc.stockquotemanager.service.StockService;
 
 @RestController
 @RequestMapping("/quote")
 public class QuoteController {
 
-	private QuoteRepository quoteRepository;
+	private QuoteService quoteService;
 	private StockService stockService;
 	
 	@Autowired
-	public QuoteController(QuoteRepository quoteRepository, StockService stockService) {
-		this.quoteRepository = quoteRepository;
+	public QuoteController(QuoteService quoteService, StockService stockService) {
+		this.quoteService = quoteService;
 		this.stockService = stockService;
 	}
 	
@@ -47,10 +47,7 @@ public class QuoteController {
 		
 		Quote quote = quoteForm.toQuote();
 		
-		quoteRepository.save(quote);
-		
-		List<Quote> quotes = quoteRepository.findByStockId(quote.getStockId());
-		StockQuoteDto stockQuote = new StockQuoteDto(quote.getStockId(), quotes);
+		StockQuoteDto stockQuote = quoteService.save(quote);
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(quote.getId()).toUri();
 		
@@ -65,8 +62,8 @@ public class QuoteController {
 			return ResponseEntity.status(404).build();
 		}
 		
-		List<Quote> quotes = quoteRepository.findByStockId(stockId);
-		StockQuoteDto stockQuote = new StockQuoteDto(stockId, quotes);
+		StockQuoteDto stockQuote = quoteService.findByStockId(stockId);
+		
 		return ResponseEntity.status(200).body(stockQuote);
 	}
 	
@@ -75,8 +72,7 @@ public class QuoteController {
 		List<StockDto> stocks = stockService.getAll();
 		
 		List<StockQuoteDto> stockQuotes = stocks.stream().map(stock -> {
-			List<Quote> quotes = quoteRepository.findByStockId(stock.getId());
-			StockQuoteDto stockQuote = new StockQuoteDto(stock.getId(), quotes);
+			StockQuoteDto stockQuote = quoteService.findByStockId(stock.getId());
 			return stockQuote;
 		}).collect(Collectors.toList());
 		
