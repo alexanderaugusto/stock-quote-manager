@@ -1,7 +1,7 @@
 package br.inatel.icc.stockquotemanager.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,14 +15,14 @@ public class Quote {
 	private Long id;
 	
 	private String stockId;
-	private LocalDateTime date;
+	private LocalDate date;
 	private BigDecimal value;
 	
 	
 	public Quote() {
 	}
 	
-	public Quote(LocalDateTime date, BigDecimal value, String stockId) {
+	public Quote(LocalDate date, BigDecimal value, String stockId) {
 		this.stockId = stockId;
 		this.date = date;
 		this.value = value;
@@ -36,7 +36,7 @@ public class Quote {
 		return stockId;
 	}
 
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
