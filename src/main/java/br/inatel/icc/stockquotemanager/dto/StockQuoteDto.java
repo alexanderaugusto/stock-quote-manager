@@ -28,7 +28,7 @@ public class StockQuoteDto {
 
 	private void convertQuotes(List<Quote> quotes) {
 		quotes.forEach(quote -> {
-			LocalDate date = quote.getDate().toLocalDate();
+			LocalDate date = quote.getDate();
 			BigDecimal value = quote.getValue();
 			
 			this.quotes.put(date.toString(), value.toBigInteger().toString());
