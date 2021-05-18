@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,27 +20,28 @@ public class StockService {
 
 	private String defaultUrl = "http://localhost:8080";
 	private RestTemplate restTemplate;
-
+	private Logger logger = LogManager.getLogger(StockService.class);
+	
 	public StockService() {
 		restTemplate = new RestTemplate();
 	}
 
 	@Cacheable(value = "stock")
 	public StockDto findById(String id) {
-		System.out.println("*** GET STOCK BY ID ***");
+		logger.info("Getting stock from external API");
 		StockDto stock = restTemplate.getForObject(defaultUrl + "/stock/" + id, StockDto.class);
 		return stock;
 	}
 	
 	@Cacheable(value = "stocks")
 	public List<StockDto> findAll() {
-		System.out.println("*** GET ALL STOCKS ***");
-		StockDto[] stocks = restTemplate.getForObject("http://localhost:8080/stock", StockDto[].class);
+		logger.info("Getting all stocks from external API");
+		StockDto[] stocks = restTemplate.getForObject(defaultUrl + "/stock", StockDto[].class);
 		return Arrays.asList(stocks);
 	}
 	
 	public void registerForNotification() {
-		System.out.println("*** REGISTER FOR NOTIFICATION ***");
+		logger.info("Register for notification in external API");
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    JSONObject data = new JSONObject();
