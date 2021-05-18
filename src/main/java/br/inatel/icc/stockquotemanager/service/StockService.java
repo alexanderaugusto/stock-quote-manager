@@ -19,15 +19,15 @@ public class StockService {
 		restTemplate = new RestTemplate();
 	}
 
-	@Cacheable(value = "stocks")
-	public List<StockDto> getAll() {
-		StockDto[] stocks = restTemplate.getForObject("http://localhost:8080/stock", StockDto[].class);
-		return Arrays.asList(stocks);
-	}
-	
 	@Cacheable(value = "stock")
-	public StockDto getById(String id) {
+	public StockDto findById(String id) {
 		StockDto stock = restTemplate.getForObject(defaultUrl + "/stock/" + id, StockDto.class);
 		return stock;
+	}
+	
+	@Cacheable(value = "stocks")
+	public List<StockDto> findAll() {
+		StockDto[] stocks = restTemplate.getForObject("http://localhost:8080/stock", StockDto[].class);
+		return Arrays.asList(stocks);
 	}
 }

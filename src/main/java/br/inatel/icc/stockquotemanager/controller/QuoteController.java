@@ -39,7 +39,7 @@ public class QuoteController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
-		StockDto stock = stockService.getById(quoteForm.getStockId());
+		StockDto stock = stockService.findById(quoteForm.getStockId());
 		
 		if(stock == null) {
 			return ResponseEntity.status(404).build();
@@ -56,7 +56,7 @@ public class QuoteController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<StockQuoteDto> listById(@PathVariable("id") String stockId){
-		StockDto stock = stockService.getById(stockId);
+		StockDto stock = stockService.findById(stockId);
 		
 		if(stock == null) {
 			return ResponseEntity.status(404).build();
@@ -69,7 +69,7 @@ public class QuoteController {
 	
 	@GetMapping
 	public ResponseEntity<List<StockQuoteDto>> list(){
-		List<StockDto> stocks = stockService.getAll();
+		List<StockDto> stocks = stockService.findAll();
 		
 		List<StockQuoteDto> stockQuotes = stocks.stream().map(stock -> {
 			StockQuoteDto stockQuote = quoteService.findByStockId(stock.getId());
