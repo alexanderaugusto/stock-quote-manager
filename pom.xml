@@ -72,9 +72,16 @@
 			<artifactId>json</artifactId>
 			<version>20210307</version>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<finalName>stock-quote-manager</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
