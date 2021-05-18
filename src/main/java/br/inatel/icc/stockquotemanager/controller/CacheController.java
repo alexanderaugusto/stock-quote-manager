@@ -27,7 +27,7 @@ public class CacheController {
 
 	@DeleteMapping
 	@Transactional
-	@Caching(evict = { @CacheEvict("stocks"), @CacheEvict(value = "stock") })
+	@Caching(evict = { @CacheEvict(value = "stocks", allEntries = true), @CacheEvict(value = "stock", allEntries = true) })
 	public ResponseEntity<?> cleanCache() {
 		logger.info("Cleaning cache");
 		return ResponseEntity.status(204).build();
