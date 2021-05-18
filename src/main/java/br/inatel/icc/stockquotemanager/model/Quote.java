@@ -18,7 +18,6 @@ public class Quote {
 	private LocalDate date;
 	private BigDecimal value;
 	
-	
 	public Quote() {
 	}
 	
