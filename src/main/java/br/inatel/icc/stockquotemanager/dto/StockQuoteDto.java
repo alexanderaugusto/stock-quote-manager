@@ -15,7 +15,7 @@ public class StockQuoteDto {
 	
 	public StockQuoteDto(String stockId, List<Quote> quotes) {
 		this.id = stockId;
-		convertQuotes(quotes);
+		this.quotes = convertQuotesToMap(quotes);
 	}
 	
 	public String getId() {
@@ -26,12 +26,16 @@ public class StockQuoteDto {
 		return quotes;
 	}
 
-	private void convertQuotes(List<Quote> quotes) {
-		quotes.forEach(quote -> {
+	public static Map<String, String> convertQuotesToMap(List<Quote> quotesList){
+		Map<String, String> quotesMap = new HashMap<>();
+		
+		quotesList.forEach(quote -> {
 			LocalDate date = quote.getDate();
 			BigDecimal value = quote.getValue();
 			
-			this.quotes.put(date.toString(), value.toBigInteger().toString());
+			quotesMap.put(date.toString(), value.toBigInteger().toString());
 		});
+		
+		return quotesMap;
 	}
 }
