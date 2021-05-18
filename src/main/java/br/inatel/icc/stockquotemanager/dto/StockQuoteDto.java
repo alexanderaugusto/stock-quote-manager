@@ -15,7 +15,7 @@ public class StockQuoteDto {
 	
 	public StockQuoteDto(String stockId, List<Quote> quotes) {
 		this.id = stockId;
-		this.quotes = convertQuotesToMap(quotes);
+		this.quotes = convertQuotesListToMap(quotes);
 	}
 	
 	public String getId() {
@@ -26,7 +26,7 @@ public class StockQuoteDto {
 		return quotes;
 	}
 
-	public static Map<String, String> convertQuotesToMap(List<Quote> quotesList){
+	public Map<String, String> convertQuotesListToMap(List<Quote> quotesList){
 		Map<String, String> quotesMap = new HashMap<>();
 		
 		quotesList.forEach(quote -> {
