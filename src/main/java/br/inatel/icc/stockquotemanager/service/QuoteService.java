@@ -19,13 +19,8 @@ public class QuoteService {
 		this.quoteRepository = quoteRepository;
 	}
 	
-	public StockQuoteDto save(Quote quote) {
-		quoteRepository.save(quote);
-		
-		List<Quote> quotes = quoteRepository.findByStockId(quote.getStockId());
-		StockQuoteDto stockQuote = new StockQuoteDto(quote.getStockId(), quotes);
-		
-		return stockQuote;
+	public void saveAll(List<Quote> quotes) {
+		quoteRepository.saveAll(quotes);
 	}
 	
 	public StockQuoteDto findByStockId(String stockId) {
