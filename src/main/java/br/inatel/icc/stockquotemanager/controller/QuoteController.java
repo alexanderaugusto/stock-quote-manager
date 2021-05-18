@@ -39,17 +39,19 @@ public class QuoteController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
-		StockDto stock = stockService.findById(quoteForm.getStockId());
+		StockDto stock = stockService.findById(quoteForm.getId());
 		
 		if(stock == null) {
 			return ResponseEntity.status(404).build();
 		}
 		
-		Quote quote = quoteForm.toQuote();
+		List<Quote> quotes = quoteForm.convertQuotesMapToList();
 		
-		StockQuoteDto stockQuote = quoteService.save(quote);
+		quoteService.saveAll(quotes);
 		
-		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(quote.getId()).toUri();
+		StockQuoteDto stockQuote = new StockQuoteDto(quoteForm.getId(), quotes);
+		
+		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
 		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}
