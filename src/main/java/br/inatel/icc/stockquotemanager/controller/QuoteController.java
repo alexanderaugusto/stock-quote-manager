@@ -49,7 +49,7 @@ public class QuoteController {
 		
 		quoteService.saveAll(quotes);
 		
-		StockQuoteDto stockQuote = new StockQuoteDto(quoteForm.getId(), quotes);
+		StockQuoteDto stockQuote = quoteService.findByStockId(quoteForm.getId());
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
