@@ -27,7 +27,7 @@ public class CacheController {
 	@Transactional
 	@Caching(evict = { @CacheEvict(value = "stocks", allEntries = true), @CacheEvict(value = "stock", allEntries = true) })
 	public ResponseEntity<?> cleanCache() {
-		log.info("Cleaning cache");
+		log.info("cleaning cache");
 		return ResponseEntity.status(204).build();
 	}
 }

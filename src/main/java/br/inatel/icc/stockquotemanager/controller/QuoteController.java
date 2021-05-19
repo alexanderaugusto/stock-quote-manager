@@ -23,9 +23,11 @@ import br.inatel.icc.stockquotemanager.form.QuoteForm;
 import br.inatel.icc.stockquotemanager.model.Quote;
 import br.inatel.icc.stockquotemanager.service.QuoteService;
 import br.inatel.icc.stockquotemanager.service.StockService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/quote")
+@Slf4j
 public class QuoteController {
 
 	private QuoteService quoteService;
@@ -43,6 +45,7 @@ public class QuoteController {
 		StockDto stock = stockService.findById(quoteForm.getId());
 		
 		if(stock == null) {
+			log.error("stock of id " + quoteForm.getId() + " not found");
 			return ResponseEntity.status(404).build();
 		}
 		
@@ -54,6 +57,8 @@ public class QuoteController {
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
+		log.info("some quotes was created to the stock " + stock.getId());
+		
 		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}
 	
@@ -62,6 +67,7 @@ public class QuoteController {
 		StockDto stock = stockService.findById(stockId);
 		
 		if(stock == null) {
+			log.error("stock of id " + stockId + " not found");
 			return ResponseEntity.status(404).build();
 		}
 		

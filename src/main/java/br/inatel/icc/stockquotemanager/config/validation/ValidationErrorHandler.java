@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import br.inatel.icc.stockquotemanager.dto.FormErrorDto;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class ValidationErrorHandler {
 private MessageSource messageSource;
 	
@@ -32,6 +34,7 @@ private MessageSource messageSource;
 		
 		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 		fieldErrors.forEach(err -> {
+			log.error("there was an error with the field: " + err.getField(), err);
 			String field = err.getField();
 			String message = messageSource.getMessage(err, LocaleContextHolder.getLocale());
 		
@@ -46,6 +49,7 @@ private MessageSource messageSource;
 	@ResponseStatus(code = HttpStatus.CONFLICT)
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public FormErrorDto uniqueFieldHandler(DataIntegrityViolationException exception){
+		log.error("there was an attribute conflict in the database" + exception);
 		return null;
 	}
 }
