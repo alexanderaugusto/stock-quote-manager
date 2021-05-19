@@ -93,10 +93,12 @@ public class QuoteControllerTest {
 		
 		Mockito.when(stockService.findById(stockId)).thenReturn(stock);
 		
+		JSONObject quotes = new JSONObject();
+		quotes.put("2021-01-10", "250");
+		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("date", "2019-01-10");
-		data.put("value", "15");
-		data.put("stockId", "petr4");
+		data.put("id", "petr4");
+		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 				.post("/quote")
@@ -113,15 +115,57 @@ public class QuoteControllerTest {
 		
 		Mockito.when(stockService.findById(stockId)).thenReturn(null);
 		
+		JSONObject quotes = new JSONObject();
+		quotes.put("2021-01-10", "250");
+		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("date", "2019-01-10");
-		data.put("value", "15");
-		data.put("stockId", "petr1");
+		data.put("id", "petr1");
+		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 				.post("/quote")
 				.content(data.toString())
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().is(404));
+	}
+	
+	@Test
+	public void shouldNotCreateAQuoteBecauseDateIsInvalid() throws Exception {
+		String stockId = "petr1";
+		
+		Mockito.when(stockService.findById(stockId)).thenReturn(null);
+		
+		JSONObject quotes = new JSONObject();
+		quotes.put("2021-01-", "250");
+		quotes.put("2021-01-11", "350");
+		JSONObject data = new JSONObject();
+		data.put("id", "petr4");
+		data.put("quotes", quotes);
+		
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/quote")
+				.content(data.toString())
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	public void shouldNotCreateAQuoteBecauseValueIsInvalid() throws Exception {
+		String stockId = "petr1";
+		
+		Mockito.when(stockService.findById(stockId)).thenReturn(null);
+		
+		JSONObject quotes = new JSONObject();
+		quotes.put("2021-01-10", "-250");
+		quotes.put("2021-01-11", "350");
+		JSONObject data = new JSONObject();
+		data.put("id", "petr4");
+		data.put("quotes", quotes);
+		
+		mockMvc.perform(MockMvcRequestBuilders
+				.post("/quote")
+				.content(data.toString())
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 }
