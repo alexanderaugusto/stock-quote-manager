@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +40,7 @@ public class QuoteController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<StockQuoteDto> create(@RequestBody QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<StockQuoteDto> create(@RequestBody @Valid QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
 		StockDto stock = stockService.findById(quoteForm.getId());
 		
 		if(stock == null) {
