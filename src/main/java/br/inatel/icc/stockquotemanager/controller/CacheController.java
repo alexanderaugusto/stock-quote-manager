@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.inatel.icc.stockquotemanager.StockQuoteManagerApplication;
 import br.inatel.icc.stockquotemanager.service.StockService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/stockcache")
+@Slf4j
 public class CacheController {
 	
 	@Autowired
@@ -26,7 +27,7 @@ public class CacheController {
 	@Transactional
 	@Caching(evict = { @CacheEvict(value = "stocks", allEntries = true), @CacheEvict(value = "stock", allEntries = true) })
 	public ResponseEntity<?> cleanCache() {
-		StockQuoteManagerApplication.logger.info("Cleaning cache");
+		log.info("Cleaning cache");
 		return ResponseEntity.status(204).build();
 	}
 }
