@@ -6,11 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotEmpty;
+
+import com.sun.istack.NotNull;
+
+import br.inatel.icc.stockquotemanager.config.validation.constraint.QuoteConstraint;
 import br.inatel.icc.stockquotemanager.model.Quote;
 
 public class QuoteForm {
 
+	@NotNull @NotEmpty
 	private String id;
+	@NotNull @NotEmpty @QuoteConstraint
 	private Map<String, String> quotes;
 
 	public String getId() {
