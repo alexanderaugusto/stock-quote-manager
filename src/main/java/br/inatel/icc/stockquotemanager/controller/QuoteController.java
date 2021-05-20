@@ -51,13 +51,11 @@ public class QuoteController {
 		
 		List<Quote> quotes = quoteForm.convertQuotesMapToList();
 		
-		quoteService.saveAll(quotes);
-		
-		StockQuoteDto stockQuote = quoteService.findByStockId(quoteForm.getId());
+		StockQuoteDto stockQuote = quoteService.saveAll(quoteForm.getId(), quotes);
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
-		log.info("some quotes was created to the stock " + stock.getId());
+		log.info(stockQuote.getQuotes().size() + " quotes was created to the stock " + stock.getId());
 		
 		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}

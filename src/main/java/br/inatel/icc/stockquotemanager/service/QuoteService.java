@@ -19,8 +19,11 @@ public class QuoteService {
 		this.quoteRepository = quoteRepository;
 	}
 	
-	public void saveAll(List<Quote> quotes) {
+	public StockQuoteDto saveAll(String stockId, List<Quote> quotes) {
 		quoteRepository.saveAll(quotes);
+		StockQuoteDto stockQuote = findByStockId(stockId);
+		
+		return stockQuote;
 	}
 	
 	public StockQuoteDto findByStockId(String stockId) {
