@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,18 +24,16 @@ import br.inatel.icc.stockquotemanager.dto.StockDto;
 @ActiveProfiles("test")
 public class StockServiceTest {
 
-	private StockService stockService;
-	
 	@Mock
 	private RestTemplate restTemplate;
 	
-	private String defaultUrl = "http://localhost:8080";
+	@InjectMocks
+	private StockService stockService;
+	
 	private StockDto[] stocks = new StockDto[2];
 	
 	@BeforeEach
 	public void beforeEach() {
-		this.stockService = new StockService(defaultUrl);
-		
 		StockDto stock1 = new StockDto();
 		stock1.setId("petr4");
 		
@@ -44,9 +44,10 @@ public class StockServiceTest {
 		stocks[1] = stock2;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldFindAllStocks() {
-		Mockito.when(restTemplate.getForObject(defaultUrl, StockDto[].class)).thenReturn(stocks);
+		Mockito.when(restTemplate.getForObject(Mockito.anyString(), ArgumentMatchers.any(Class.class))).thenReturn(stocks);
 		
 		List<StockDto> stocksDto = stockService.findAll();
 		

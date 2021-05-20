@@ -1,10 +1,14 @@
 package br.inatel.icc.stockquotemanager.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -35,14 +39,27 @@ public class QuoteControllerTest {
 	@MockBean
 	private StockService stockService;
 	
+	private List<StockDto> stocks;
+	
+	@BeforeEach
+	public void beforeEach() {
+		stocks = new ArrayList<>();
+		
+		StockDto stock1 = new StockDto();
+		stock1.setId("vale5");
+		
+		StockDto stock2 = new StockDto();
+		stock2.setId("petr4");
+		
+		stocks.add(stock1);
+		stocks.add(stock2);
+		
+		Mockito.when(stockService.findAll()).thenReturn(stocks);
+	}
+	
 	@Test
 	public void shouldListStockQuoteByStockId() throws Exception {
 		String stockId = "petr4";
-		
-		StockDto stock = new StockDto();
-		stock.setId("petr4");
-		
-		Mockito.when(stockService.findById(stockId)).thenReturn(stock);
 		
 		mockMvc.perform(MockMvcRequestBuilders
 				.get("/quote/" + stockId)
@@ -56,8 +73,6 @@ public class QuoteControllerTest {
 	public void shouldNotListStockQuoteBecauseStockNotExists() throws Exception {
 		String stockId = "petr1";
 		
-		Mockito.when(stockService.findById(stockId)).thenReturn(null);
-		
 		mockMvc.perform(MockMvcRequestBuilders
 				.get("/quote/" + stockId)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -66,38 +81,22 @@ public class QuoteControllerTest {
 
 	@Test
 	public void shouldListAllStockQuotes() throws Exception {
-		StockDto stock1 = new StockDto();
-		stock1.setId("petr3");
-		
-		StockDto stock2 = new StockDto();
-		stock2.setId("petr4");
-		
-		List<StockDto> stocks = new ArrayList<>();
-		stocks.add(stock1);
-		stocks.add(stock2);
-		
-		Mockito.when(stockService.findAll()).thenReturn(stocks);
-		
 		mockMvc.perform(MockMvcRequestBuilders
 				.get("/quote")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(MockMvcResultMatchers.status().is(200));
+		.andExpect(MockMvcResultMatchers.status().is(200))
+		.andExpect(jsonPath("$.length()", is(2)));
 	}
 	
 	@Test
 	public void shouldCreateAQuoteToAStock() throws Exception {
 		String stockId = "petr4";
 		
-		StockDto stock = new StockDto();
-		stock.setId("petr4");
-		
-		Mockito.when(stockService.findById(stockId)).thenReturn(stock);
-		
 		JSONObject quotes = new JSONObject();
 		quotes.put("2021-01-10", "250");
 		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("id", "petr4");
+		data.put("id", stockId);
 		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders
@@ -113,13 +112,11 @@ public class QuoteControllerTest {
 	public void shouldNotCreateAQuoteBecauseStockNotExists() throws Exception {
 		String stockId = "petr1";
 		
-		Mockito.when(stockService.findById(stockId)).thenReturn(null);
-		
 		JSONObject quotes = new JSONObject();
 		quotes.put("2021-01-10", "250");
 		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("id", "petr1");
+		data.put("id", stockId);
 		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders
@@ -131,15 +128,13 @@ public class QuoteControllerTest {
 	
 	@Test
 	public void shouldNotCreateAQuoteBecauseDateIsInvalid() throws Exception {
-		String stockId = "petr1";
-		
-		Mockito.when(stockService.findById(stockId)).thenReturn(null);
-		
+		String stockId = "petr4";
+			
 		JSONObject quotes = new JSONObject();
 		quotes.put("2021-01-", "250");
 		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("id", "petr4");
+		data.put("id", stockId);
 		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders
@@ -151,15 +146,13 @@ public class QuoteControllerTest {
 	
 	@Test
 	public void shouldNotCreateAQuoteBecauseValueIsInvalid() throws Exception {
-		String stockId = "petr1";
-		
-		Mockito.when(stockService.findById(stockId)).thenReturn(null);
+		String stockId = "petr4";
 		
 		JSONObject quotes = new JSONObject();
 		quotes.put("2021-01-10", "-250");
 		quotes.put("2021-01-11", "350");
 		JSONObject data = new JSONObject();
-		data.put("id", "petr4");
+		data.put("id", stockId);
 		data.put("quotes", quotes);
 		
 		mockMvc.perform(MockMvcRequestBuilders

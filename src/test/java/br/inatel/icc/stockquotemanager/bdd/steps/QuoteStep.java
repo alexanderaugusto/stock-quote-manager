@@ -1,5 +1,8 @@
 package br.inatel.icc.stockquotemanager.bdd.steps;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mockito.Mockito;
@@ -26,9 +29,12 @@ public class QuoteStep extends CucumberSpringConfiguration{
 	
 	@Given("a stock of id {string} quote of date {string} and value {string}")
 	public void a_stock_of_id_quote_of_date_and_value(String stockId, String date, String value) throws JSONException {
+		List<StockDto> stocks = new ArrayList<>();
 	    StockDto stock = new StockDto();
 		stock.setId(stockId);
-		Mockito.when(stockService.findById(stockId)).thenReturn(stock);
+		stocks.add(stock);
+		
+		Mockito.when(stockService.findAll()).thenReturn(stocks);
 		
 		JSONObject quotes = new JSONObject();
 	    quotes.put(date, value);
