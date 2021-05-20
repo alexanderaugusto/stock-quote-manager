@@ -55,7 +55,7 @@ public class QuoteController {
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
-		log.info(stockQuote.getQuotes().size() + " quotes was created to the stock " + stock.getId());
+		log.info(quotes.size() + " quote(s) was created to the stock " + stock.getId());
 		
 		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}
