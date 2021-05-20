@@ -19,11 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StockService {
 
-	@Value("${stock-manager.url}")
 	private String defaultUrl;
 	private RestTemplate restTemplate;
 	
-	public StockService() {
+	public StockService(@Value("${stock-manager.url}") String defaultUrl) {
+		this.defaultUrl = defaultUrl;
 		restTemplate = new RestTemplate();
 	}
 
