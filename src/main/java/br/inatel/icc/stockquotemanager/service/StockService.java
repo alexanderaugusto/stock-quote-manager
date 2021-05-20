@@ -42,7 +42,7 @@ public class StockService {
 	}
 	
 	public void registerForNotification() {
-		log.info("gegistering for notification in external API");
+		log.info("registering for notification in external API");
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    JSONObject data = new JSONObject();
