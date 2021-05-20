@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StockService {
 
-	private String defaultUrl = "http://localhost:8080";
+	@Value("${stock-manager.url}")
+	private String defaultUrl;
 	private RestTemplate restTemplate;
 	
 	public StockService() {
