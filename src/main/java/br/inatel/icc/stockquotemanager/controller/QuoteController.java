@@ -73,6 +73,8 @@ public class QuoteController {
 		
 		StockQuoteDto stockQuote = quoteService.findByStockId(stockId);
 		
+		log.info("listing quotes of stock " + stockId);
+		
 		return ResponseEntity.status(200).body(stockQuote);
 	}
 	
@@ -84,6 +86,8 @@ public class QuoteController {
 			StockQuoteDto stockQuote = quoteService.findByStockId(stock.getId());
 			return stockQuote;
 		}).collect(Collectors.toList());
+		
+		log.info("listing all stock quotes: " + stockQuotes.size() + " stocks");
 		
 		return ResponseEntity.status(200).body(stockQuotes);
 	}
