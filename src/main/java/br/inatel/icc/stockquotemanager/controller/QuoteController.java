@@ -42,9 +42,9 @@ public class QuoteController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<StockQuoteDto> create(@RequestBody @Valid QuoteForm quoteForm, UriComponentsBuilder uriBuilder){
-		StockDto stock = stockService.findById(quoteForm.getId());
+		List<StockDto> stocks = stockService.findAll();
 		
-		if(stock == null) {
+		if(!StockDto.stockExists(quoteForm.getId(), stocks)) {
 			log.error("stock of id " + quoteForm.getId() + " not found");
 			return ResponseEntity.status(404).build();
 		}
@@ -55,16 +55,16 @@ public class QuoteController {
 		
 		URI uri = uriBuilder.path("/quote/{id}").buildAndExpand(stockQuote.getId()).toUri();
 		
-		log.info(quotes.size() + " quote(s) was created to the stock " + stock.getId());
+		log.info(quotes.size() + " quote(s) was created to the stock " + quoteForm.getId());
 		
 		return ResponseEntity.status(201).location(uri).body(stockQuote);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<StockQuoteDto> listById(@PathVariable("id") String stockId){
-		StockDto stock = stockService.findById(stockId);
+		List<StockDto> stocks = stockService.findAll();
 		
-		if(stock == null) {
+		if(!StockDto.stockExists(stockId, stocks)) {
 			log.error("stock of id " + stockId + " not found");
 			return ResponseEntity.status(404).build();
 		}
