@@ -11,4 +11,5 @@ Scenario: Insert some quotes to a stock
 	| petr4 | 2020-02-22 |  450  |  201   |
 	| petr4 | 2020-04-25 |  -400 |  400   |
 	| petr4 | 2020-04-   |  300  |  400   |
+	| petr4 | 2020-04-   |   a   |  400   |
 	
