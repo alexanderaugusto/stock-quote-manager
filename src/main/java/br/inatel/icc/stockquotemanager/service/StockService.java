@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
@@ -22,21 +23,22 @@ public class StockService {
 	private String defaultUrl;
 	private RestTemplate restTemplate;
 	
-	public StockService(@Value("${stock-manager.url}") String defaultUrl) {
+	@Autowired
+	public StockService(@Value("${stock-manager.url}") String defaultUrl, RestTemplate restTemplate) {
 		this.defaultUrl = defaultUrl;
-		restTemplate = new RestTemplate();
+		this.restTemplate = restTemplate;
 	}
 
-	@Cacheable(value = "stock")
-	public StockDto findById(String id) {
-		log.info("getting stock from external API");
-		StockDto stock = restTemplate.getForObject(defaultUrl + "/stock/" + id, StockDto.class);
-		return stock;
-	}
+//	@Cacheable(value = "stock")
+//	public StockDto findById(String id) {
+//		log.info("getting stock from external API");
+//		StockDto stock = restTemplate.getForObject(defaultUrl + "/stock/" + id, StockDto.class);
+//		return stock;
+//	}
 	
 	@Cacheable(value = "stocks")
 	public List<StockDto> findAll() {
-		log.info("getting all stocks from external API");
+		log.info("getting stocks from external API");
 		StockDto[] stocks = restTemplate.getForObject(defaultUrl + "/stock", StockDto[].class);
 		return Arrays.asList(stocks);
 	}
