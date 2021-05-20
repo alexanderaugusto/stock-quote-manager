@@ -1,6 +1,6 @@
 Feature: User can create new quotes to a stock
 
-Scenario: Insert some quotes to a stock
+Scenario Outline: Insert some quotes to a stock
 	Given a stock of id '<stock>' quote of date '<date>' and value '<value>'
 	When call the api route /quote passing the data
 	Then the quote is created and the response status will be <status>
