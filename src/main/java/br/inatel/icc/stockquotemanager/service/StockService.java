@@ -29,20 +29,20 @@ public class StockService {
 
 	@Cacheable(value = "stock")
 	public StockDto findById(String id) {
-		log.info("Getting stock from external API");
+		log.info("getting stock from external API");
 		StockDto stock = restTemplate.getForObject(defaultUrl + "/stock/" + id, StockDto.class);
 		return stock;
 	}
 	
 	@Cacheable(value = "stocks")
 	public List<StockDto> findAll() {
-		log.info("Getting all stocks from external API");
+		log.info("getting all stocks from external API");
 		StockDto[] stocks = restTemplate.getForObject(defaultUrl + "/stock", StockDto[].class);
 		return Arrays.asList(stocks);
 	}
 	
 	public void registerForNotification() {
-		log.info("Registering for notification in external API");
+		log.info("gegistering for notification in external API");
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    JSONObject data = new JSONObject();
