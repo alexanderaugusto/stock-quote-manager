@@ -1,6 +1,7 @@
 package br.inatel.icc.stockquotemanager.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,9 @@ public class QuoteService {
 		StockQuoteDto stockQuote = new StockQuoteDto(stockId, quotes);
 		
 		return stockQuote;
+	}
+	
+	public Optional<Quote> findByStockIdAndDate(Quote quote) {
+		return quoteRepository.findByStockIdAndDate(quote.getStockId(), quote.getDate());
 	}
 }
